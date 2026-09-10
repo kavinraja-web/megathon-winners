@@ -1,43 +1,69 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Landing from './pages/Landing';
-import Explore from './pages/Explore';
-import ProductDetails from './pages/ProductDetails';
-import FarmerProfile from './pages/FarmerProfile';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import FarmerDashboard from './pages/FarmerDashboard';
-import AddProduce from './pages/AddProduce';
-import SmartSearch from './pages/SmartSearch';
-import TrendAnalysis from './pages/TrendAnalysis';
-import { AuthProvider } from './context/AuthContext';
-import { LanguageProvider } from './context/LanguageContext';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
+import DashboardLayout from './components/layout/DashboardLayout';
+
+// Shared
+import BatchDetails from './components/shared/BatchDetails';
+
+// Pharmacy
+import PharmacyDashboard from './pages/pharmacy/PharmacyDashboard';
+import Inventory from './pages/pharmacy/Inventory';
+import CreateReturn from './pages/pharmacy/CreateReturn';
+
+// Distributor
+import DistributorDashboard from './pages/distributor/DistributorDashboard';
+import ReturnRequests from './pages/distributor/ReturnRequests';
+
+// Manufacturer
+import ManufacturerDashboard from './pages/manufacturer/ManufacturerDashboard';
+import FraudDetection from './pages/manufacturer/FraudDetection';
+import ReturnedBatches from './pages/manufacturer/ReturnedBatches';
+
+// Facility
+import FacilityDashboard from './pages/facility/FacilityDashboard';
+import DestructionProcessing from './pages/facility/DestructionProcessing';
+
+// Admin
+import AdminDashboard from './pages/admin/AdminDashboard';
+import GlobalMonitoring from './pages/admin/GlobalMonitoring';
 
 function App() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
+    <AppProvider>
       <Router>
-        <div className="min-h-screen flex flex-col bg-earth-100 font-sans text-gray-900">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/smart-search" element={<SmartSearch />} />
-              <Route path="/trends" element={<TrendAnalysis />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/farmer/:id" element={<FarmerProfile />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
-              <Route path="/farmer/add-produce" element={<AddProduce />} />
-            </Routes>
-          </main>
-        </div>
+        <Routes>
+          <Route path="/" element={<Navigate to="/pharmacy" replace />} />
+          
+          <Route element={<DashboardLayout />}>
+            {/* Pharmacy Routes */}
+            <Route path="/pharmacy" element={<PharmacyDashboard />} />
+            <Route path="/pharmacy/inventory" element={<Inventory />} />
+            <Route path="/pharmacy/returns" element={<CreateReturn />} />
+            
+            {/* Distributor Routes */}
+            <Route path="/distributor" element={<DistributorDashboard />} />
+            <Route path="/distributor/returns" element={<ReturnRequests />} />
+
+            {/* Manufacturer Routes */}
+            <Route path="/manufacturer" element={<ManufacturerDashboard />} />
+            <Route path="/manufacturer/fraud" element={<FraudDetection />} />
+            <Route path="/manufacturer/batches" element={<ReturnedBatches />} />
+
+            {/* Facility Routes */}
+            <Route path="/facility" element={<FacilityDashboard />} />
+            <Route path="/facility/destruction" element={<DestructionProcessing />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/monitoring" element={<GlobalMonitoring />} />
+
+            {/* Shared */}
+            <Route path="/batch/:id" element={<BatchDetails />} />
+          </Route>
+        </Routes>
       </Router>
-    </AuthProvider>
-    </LanguageProvider>
+    </AppProvider>
   );
 }
 
